@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ac511-volume"
+version = "0.1.0"
+description = "Dell AC511 USB SoundBar volume control"
+requires-python = ">=3.8"
+
+[project.scripts]
+ac511-volume = "ac511_volume.main:main"

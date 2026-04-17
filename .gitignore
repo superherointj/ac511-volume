@@ -1,0 +1,9 @@
+*.o
+*.so
+result
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+.pytest_cache/
+flake.lock
