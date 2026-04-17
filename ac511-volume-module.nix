@@ -24,9 +24,10 @@ in
 
   config = lib.mkIf cfg.enable {
     # Allow any user to read the Dell AC511 input device
+    # Note: actual device name is "Dell Dell AC511 USB SoundBar" (Dell duplicated)
     services.udev = {
       extraRules = ''
-        SUBSYSTEM=="input", ATTRS{name}=="Dell AC511 USB SoundBar", MODE="0444"
+        SUBSYSTEM=="input", ATTRS{name}=="Dell Dell AC511 USB SoundBar", MODE="0444"
       '';
     };
 

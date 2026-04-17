@@ -9,6 +9,7 @@ import struct
 import subprocess
 import sys
 import re
+import time
 
 # EV_KEY event type
 EV_KEY = 0x01
@@ -97,11 +98,21 @@ def main():
         sys.exit(1)
     print(f"Audio backend: {backend_name}")
 
-    # Find sink
-    sink_id = backend.find_sink()
-    if not sink_id:
-        print(f"Error: Could not find AC511 SoundBar sink!")
-        sys.exit(1)
+    # Find sink with retry (PipeWire may not have enumerated it yet on boot)
+    sink_id = None
+    max_retries = 10
+    retry_delay = 1.0  # seconds
+    for attempt in range(max_retries):
+        sink_id = backend.find_sink()
+        if sink_id:
+            break
+        if attempt < max_retries - 1:
+            print(f"  Sink not found, retrying in {retry_delay:.1f}s... (attempt {attempt + 1}/{max_retries})")
+            time.sleep(retry_delay)
+            retry_delay = min(retry_delay * 1.5, 10)  # exponential backoff, cap at 10s
+        else:
+            print(f"Error: Could not find AC511 SoundBar sink after {max_retries} attempts!")
+            sys.exit(1)
     print(f"Sink: {sink_id}")
 
     print("\nTurn the volume knob to adjust volume")
